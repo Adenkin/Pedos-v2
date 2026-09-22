@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#1F4E79" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="PE-DOS" />
+  <meta name="description" content="PE-DOS V2 Offline - Personal Executive Development Operating System" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <title>PE-DOS V2 Offline</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="splash" class="splash">
+    <div class="splash-content">
+      <div class="logo">PE-DOS</div>
+      <div class="tagline">Personal Executive Development<br>Operating System</div>
+      <div class="version">V2.0 Offline • Full Demo</div>
+    </div>
+  </div>
+
+  <div id="app" class="app hidden">
+    <header class="topbar">
+      <button id="menuBtn" class="icon-btn" aria-label="Menu">☰</button>
+      <h1 id="pageTitle">Dashboard</h1>
+      <button id="refreshBtn" class="icon-btn" title="Refresh">↻</button>
+    </header>
+
+    <nav id="sidenav" class="sidenav">
+      <div class="nav-header">
+        <strong>PE-DOS</strong>
+        <span class="nav-sub">V2 Offline Demo</span>
+      </div>
+      <a href="#" data-page="dashboard" class="nav-item active">📊 Dashboard</a>
+      <a href="#" data-page="competency" class="nav-item">🎯 Competency</a>
+      <a href="#" data-page="goals" class="nav-item">🏁 Goals</a>
+      <a href="#" data-page="journal" class="nav-item">📓 Daily Journal</a>
+      <a href="#" data-page="tasks" class="nav-item">✅ Tasks</a>
+      <a href="#" data-page="negotiation" class="nav-item">🤝 Negotiation</a>
+      <a href="#" data-page="reading" class="nav-item">📚 Reading</a>
+      <a href="#" data-page="decisions" class="nav-item">⚖️ Decisions</a>
+      <a href="#" data-page="practice" class="nav-item">🧪 Leadership Lab</a>
+      <a href="#" data-page="failures" class="nav-item">📉 Failures & Lessons</a>
+      <a href="#" data-page="weekly" class="nav-item">📅 Weekly Review</a>
+      <a href="#" data-page="settings" class="nav-item">⚙️ Settings</a>
+      <div class="nav-footer">
+        <small>All data stored on device<br>Works 100% offline</small>
+      </div>
+    </nav>
+    <div id="overlay" class="overlay"></div>
+
+    <main id="content" class="content">
+
+      <!-- DASHBOARD -->
+      <section id="page-dashboard" class="page active">
+        <div class="card score-card">
+          <div class="score-label">Executive Development Index</div>
+          <div class="score-value" id="overallScore">—</div>
+          <div class="score-max">/ 5.0</div>
+          <div class="score-status amber" id="overallStatus">—</div>
+        </div>
+        <div class="card">
+          <h3>Capability Snapshot</h3>
+          <div id="capabilityList" class="capability-list"></div>
+        </div>
+        <div class="card">
+          <h3>Top Development Priorities</h3>
+          <ul id="priorityList" class="priority-list"></ul>
+        </div>
+        <div class="card">
+          <h3>Quick Stats</h3>
+          <div class="stats-grid four">
+            <div class="stat"><span id="statTasks">0</span><small>Open Tasks</small></div>
+            <div class="stat"><span id="statJournal">0</span><small>Journal</small></div>
+            <div class="stat"><span id="statNeg">0</span><small>Negotiations</small></div>
+            <div class="stat"><span id="statBooks">0</span><small>Books</small></div>
+          </div>
+        </div>
+        <div class="card demo-note">
+          <strong>⚠ DEMO MODE</strong><br>
+          Full offline PE-DOS demo. Data stays only on this phone. Edit scores, add real entries, export anytime.
+        </div>
+      </section>
+
+      <!-- COMPETENCY -->
+      <section id="page-competency" class="page">
+        <div class="card">
+          <h3>Competency Matrix</h3>
+          <p class="hint">Rate Current 1–5. Target = goal. Gap & priority calculate automatically. Be honest.</p>
+          <div id="competencyList"></div>
+        </div>
+      </section>
+
+      <!-- GOALS -->
+      <section id="page-goals" class="page">
+        <div class="card">
+          <h3>10-Year Vision</h3>
+          <textarea id="visionText" class="input-area" rows="3" placeholder="Your 10-year leadership vision..."></textarea>
+        </div>
+        <div class="card">
+          <h3>Add New Goal</h3>
+          <label>Goal Title</label>
+          <input type="text" id="newGoalTitle" class="input" placeholder="e.g. Close Strategic Thinking gap to ≥3.5" />
+          <label>KPI</label>
+          <input type="text" id="newGoalKpi" class="input" placeholder="e.g. Maturity score" />
+          <label>Target</label>
+          <input type="text" id="newGoalTarget" class="input" placeholder="e.g. 3.5" />
+          <label>Deadline</label>
+          <input type="date" id="newGoalDeadline" class="input" />
+          <label>Status</label>
+          <select id="newGoalStatus" class="input">
+            <option value="ontrack">On Track</option>
+            <option value="atrisk">At Risk</option>
+            <option value="done">Done</option>
+          </select>
+          <button id="addGoalBtn" class="btn primary">+ Add Goal</button>
+        </div>
+        <div class="card">
+          <h3>Active Goals</h3>
+          <div id="goalsList"></div>
+        </div>
+      </section>
+
+      <!-- JOURNAL -->
+      <section id="page-journal" class="page">
+        <div class="card">
+          <h3>Today’s Journal</h3>
+          <label>Date</label>
+          <input type="date" id="journalDate" class="input" />
+          <label>Top 3 Priorities</label>
+          <textarea id="journalPriorities" class="input-area" rows="2"></textarea>
+          <label>Accomplished</label>
+          <textarea id="journalAccomplished" class="input-area" rows="2"></textarea>
+          <label>Failed / Missed</label>
+          <textarea id="journalFailed" class="input-area" rows="2"></textarea>
+          <label>Leadership Behaviour Shown</label>
+          <textarea id="journalBehaviour" class="input-area" rows="2"></textarea>
+          <label>Key Lesson</label>
+          <textarea id="journalLesson" class="input-area" rows="2"></textarea>
+          <label>Tomorrow Differently</label>
+          <textarea id="journalTomorrow" class="input-area" rows="2"></textarea>
+          <button id="saveJournalBtn" class="btn primary">Save Entry</button>
+        </div>
+        <div class="card">
+          <h3>Recent Entries</h3>
+          <div id="journalHistory"></div>
+        </div>
+      </section>
+
+      <!-- TASKS -->
+      <section id="page-tasks" class="page">
+        <div class="card">
+          <h3>Add New Task</h3>
+          <label>Task Title</label>
+          <input type="text" id="newTaskTitle" class="input" placeholder="e.g. Complete strategic analysis memo" />
+          <label>Competency / Domain</label>
+          <input type="text" id="newTaskComp" class="input" placeholder="e.g. Strategic Thinking" />
+          <label>Due Date</label>
+          <input type="date" id="newTaskDue" class="input" />
+          <button id="addTaskBtn" class="btn primary">+ Add Task</button>
+        </div>
+        <div class="card">
+          <h3>Development Tasks</h3>
+          <div id="tasksList"></div>
+        </div>
+      </section>
+
+      <!-- NEGOTIATION -->
+      <section id="page-negotiation" class="page">
+        <div class="card">
+          <h3>Log Negotiation</h3>
+          <label>Date</label>
+          <input type="date" id="negDate" class="input" />
+          <label>Situation / Counterparty</label>
+          <input type="text" id="negSituation" class="input" placeholder="e.g. Vendor contract renewal" />
+          <label>Objective</label>
+          <input type="text" id="negObjective" class="input" />
+          <label>My BATNA</label>
+          <textarea id="negBatna" class="input-area" rows="2"></textarea>
+          <label>Ideal Outcome</label>
+          <input type="text" id="negIdeal" class="input" />
+          <label>Final Outcome</label>
+          <textarea id="negOutcome" class="input-area" rows="2"></textarea>
+          <label>What Worked</label>
+          <textarea id="negWorked" class="input-area" rows="2"></textarea>
+          <label>What Failed / Lesson</label>
+          <textarea id="negLesson" class="input-area" rows="2"></textarea>
+          <button id="saveNegBtn" class="btn primary">Save Negotiation</button>
+        </div>
+        <div class="card">
+          <h3>Negotiation Log</h3>
+          <div id="negHistory"></div>
+        </div>
+      </section>
+
+      <!-- READING -->
+      <section id="page-reading" class="page">
+        <div class="card">
+          <h3>Add Book / Resource</h3>
+          <label>Title</label>
+          <input type="text" id="bookTitle" class="input" />
+          <label>Author</label>
+          <input type="text" id="bookAuthor" class="input" />
+          <label>Category</label>
+          <select id="bookCategory" class="input">
+            <option>Leadership</option><option>Strategy</option><option>Negotiation</option>
+            <option>Management</option><option>Sales</option><option>Finance</option>
+            <option>Psychology</option><option>Biography</option><option>Other</option>
+          </select>
+          <label>Key Lesson / Idea</label>
+          <textarea id="bookLesson" class="input-area" rows="2"></textarea>
+          <label>Action Generated?</label>
+          <select id="bookAction" class="input">
+            <option value="No">No</option>
+            <option value="Yes">Yes</option>
+            <option value="Partial">Partial</option>
+          </select>
+          <button id="saveBookBtn" class="btn primary">Save Book</button>
+        </div>
+        <div class="card">
+          <h3>Reading Log</h3>
+          <div class="stats-grid" style="margin-bottom:12px">
+            <div class="stat"><span id="bookCount">0</span><small>Books</small></div>
+            <div class="stat"><span id="actionRate">0%</span><small>Action Rate</small></div>
+          </div>
+          <div id="bookHistory"></div>
+        </div>
+      </section>
+
+      <!-- DECISIONS -->
+      <section id="page-decisions" class="page">
+        <div class="card">
+          <h3>Decision Journal</h3>
+          <p class="hint">Separate process quality from outcome quality.</p>
+          <label>Date</label>
+          <input type="date" id="decDate" class="input" />
+          <label>Decision</label>
+          <input type="text" id="decTitle" class="input" />
+          <label>Context / Objective</label>
+          <textarea id="decContext" class="input-area" rows="2"></textarea>
+          <label>Process Quality (1-5)</label>
+          <input type="number" id="decProcess" class="input" min="1" max="5" step="1" value="3" />
+          <label>Outcome Quality (1-5)</label>
+          <input type="number" id="decOutcome" class="input" min="1" max="5" step="1" value="3" />
+          <label>Lesson</label>
+          <textarea id="decLesson" class="input-area" rows="2"></textarea>
+          <button id="saveDecBtn" class="btn primary">Save Decision</button>
+        </div>
+        <div class="card">
+          <h3>Decision Log</h3>
+          <div id="decHistory"></div>
+        </div>
+      </section>
+
+      <!-- LEADERSHIP LAB -->
+      <section id="page-practice" class="page">
+        <div class="card">
+          <h3>Leadership Experiment</h3>
+          <label>Date</label>
+          <input type="date" id="expDate" class="input" />
+          <label>Experiment / Behaviour</label>
+          <input type="text" id="expBehaviour" class="input" placeholder="e.g. Speak less, listen more" />
+          <label>Situation</label>
+          <input type="text" id="expSituation" class="input" />
+          <label>Hypothesis</label>
+          <textarea id="expHypothesis" class="input-area" rows="2"></textarea>
+          <label>Actual Result</label>
+          <textarea id="expResult" class="input-area" rows="2"></textarea>
+          <label>Lesson</label>
+          <textarea id="expLesson" class="input-area" rows="2"></textarea>
+          <button id="saveExpBtn" class="btn primary">Save Experiment</button>
+        </div>
+        <div class="card">
+          <h3>Experiment Log</h3>
+          <div id="expHistory"></div>
+        </div>
+      </section>
+
+      <!-- FAILURES -->
+      <section id="page-failures" class="page">
+        <div class="card">
+          <h3>Failure & Lesson</h3>
+          <label>Date</label>
+          <input type="date" id="failDate" class="input" />
+          <label>What Happened</label>
+          <textarea id="failWhat" class="input-area" rows="2"></textarea>
+          <label>Root Cause / My Responsibility</label>
+          <textarea id="failCause" class="input-area" rows="2"></textarea>
+          <label>Lesson</label>
+          <textarea id="failLesson" class="input-area" rows="2"></textarea>
+          <label>Corrective / Preventive Action</label>
+          <textarea id="failAction" class="input-area" rows="2"></textarea>
+          <label>Lesson Implemented?</label>
+          <select id="failImplemented" class="input">
+            <option>No</option><option>Partial</option><option>Yes</option>
+          </select>
+          <button id="saveFailBtn" class="btn primary">Save Lesson</button>
+        </div>
+        <div class="card">
+          <h3>Failure Intelligence Log</h3>
+          <div id="failHistory"></div>
+        </div>
+      </section>
+
+      <!-- WEEKLY -->
+      <section id="page-weekly" class="page">
+        <div class="card">
+          <h3>Weekly CEO Review</h3>
+          <label>Week Ending</label>
+          <input type="date" id="weekEnding" class="input" />
+          <label>Major Achievements</label>
+          <textarea id="weekAchievements" class="input-area" rows="2"></textarea>
+          <label>Missed Commitments</label>
+          <textarea id="weekMissed" class="input-area" rows="2"></textarea>
+          <label>Leadership Behaviour</label>
+          <textarea id="weekLeadership" class="input-area" rows="2"></textarea>
+          <label>Top 3 Priorities Next Week</label>
+          <textarea id="weekPriorities" class="input-area" rows="3"></textarea>
+          <label>Top 3 Development Areas</label>
+          <textarea id="weekDevAreas" class="input-area" rows="2"></textarea>
+          <button id="saveWeeklyBtn" class="btn primary">Save Weekly Review</button>
+        </div>
+      </section>
+
+      <!-- SETTINGS -->
+      <section id="page-settings" class="page">
+        <div class="card">
+          <h3>Profile</h3>
+          <label>Your Name</label>
+          <input type="text" id="userName" class="input" />
+          <label>Role / Title</label>
+          <input type="text" id="userRole" class="input" />
+          <button id="saveProfileBtn" class="btn primary">Save Profile</button>
+        </div>
+        <div class="card">
+          <h3>Data Management</h3>
+          <button id="exportBtn" class="btn secondary">Export All Data (JSON)</button>
+          <button id="importBtn" class="btn secondary">Import Data</button>
+          <input type="file" id="importFile" accept=".json" class="hidden" />
+          <button id="resetBtn" class="btn danger">Reset to Demo Data</button>
+        </div>
+        <div class="card">
+          <h3>About</h3>
+          <p style="font-size:0.9rem;line-height:1.5">
+            <strong>PE-DOS V2 Offline Demo</strong><br>
+            Personal Executive Development Operating System<br><br>
+            Modules: Dashboard, Competency, Goals, Journal, Tasks, Negotiation, Reading, Decisions, Leadership Lab, Failures, Weekly Review.<br><br>
+            All data stored only on this device. No internet required after first load. Free forever.
+          </p>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+  <script src="app.js"></script>
+</body>
+</html>

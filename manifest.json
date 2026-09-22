@@ -1,0 +1,14 @@
+{
+  "name": "PE-DOS V2 Offline",
+  "short_name": "PE-DOS",
+  "description": "Personal Executive Development Operating System - Full Offline Demo",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0D2B4A",
+  "theme_color": "#1F4E79",
+  "orientation": "portrait-primary",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
